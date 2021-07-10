@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
 import { App } from './App';
 import { createBrowserHistory } from 'history';
+import './app/styles/Calendar.css';
 
 export const history = createBrowserHistory();
 
