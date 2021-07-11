@@ -5,7 +5,6 @@ import {
   Collapse,
   Flex,
   IconButton,
-  Input,
   Link,
   Stack,
   Text,
@@ -13,6 +12,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import React from 'react';
 import LoginForm from '../../features/users/LoginForm';
 import RegisterForm from '../../features/users/RegisterForm';
 import { useStore } from '../store/store';
@@ -130,9 +130,6 @@ const DesktopNav = () => {
           </Link>
         </Box>
       ))}
-      <Box>
-        <Input placeholder='Search' />
-      </Box>
     </Stack>
   );
 };
@@ -144,7 +141,6 @@ const MobileNav = () => {
       p={4}
       display={{ md: 'none' }}
     >
-      <Input placeholder='Search' />
       {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
@@ -186,7 +182,7 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
-    label: 'Patients',
+    label: 'Pet Owners',
   },
   {
     label: 'Veterinarians',

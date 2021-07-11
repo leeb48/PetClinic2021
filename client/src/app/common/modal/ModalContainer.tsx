@@ -1,12 +1,9 @@
 import {
-  Button,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
-  ModalFooter,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
 } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
