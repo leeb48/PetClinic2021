@@ -13,9 +13,14 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import LoginForm from '../../features/users/LoginForm';
+import RegisterForm from '../../features/users/RegisterForm';
+import { useStore } from '../store/store';
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
+
+  const { modalStore } = useStore();
 
   return (
     <Box>
@@ -72,8 +77,9 @@ export default function WithSubnavigation() {
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
-            variant={'link'}
+            variant='outline'
             href={'#'}
+            onClick={() => modalStore.openModal(<LoginForm />)}
           >
             Sign In
           </Button>
@@ -87,6 +93,7 @@ export default function WithSubnavigation() {
             _hover={{
               bg: 'pink.300',
             }}
+            onClick={() => modalStore.openModal(<RegisterForm />)}
           >
             Sign Up
           </Button>

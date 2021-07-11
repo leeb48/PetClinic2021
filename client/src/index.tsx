@@ -5,6 +5,7 @@ import { Router } from 'react-router';
 import { App } from './App';
 import { createBrowserHistory } from 'history';
 import './app/styles/Calendar.css';
+import { store, StoreContext } from './app/store/store';
 
 export const history = createBrowserHistory();
 
@@ -12,9 +13,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
-      <Router history={history}>
-        <App />
-      </Router>
+      <StoreContext.Provider value={store}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </StoreContext.Provider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
