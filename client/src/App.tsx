@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import ModalContainer from './app/common/modal/ModalContainer';
 import Navbar from './app/layout/Navbar';
 import HomePage from './features/home/HomePage';
-import RegisterForm from './features/users/RegisterForm';
+import PetOwnerDashboard from './features/petOwners/dashboard/PetOwnerDashboard';
 
 export const App = () => {
   return (
@@ -12,7 +12,7 @@ export const App = () => {
       <ModalContainer />
       <Switch>
         <Route exact path='/' component={HomePage} />
-        <Route exact path='/register' component={RegisterForm} />
+        <Route exact path='/petowners' component={PetOwnerDashboard} />
       </Switch>
     </>
   );
