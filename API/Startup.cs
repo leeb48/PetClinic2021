@@ -2,8 +2,10 @@ using System;
 using API.Extensions;
 using API.Middleware;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +27,12 @@ namespace API
 
             var applicationAssembly = AppDomain.CurrentDomain.Load("Application");
 
-            services.AddControllers()
+            services.AddControllers(opt =>
+            {
+                // Ensures that every single endpoint in the API requires authentication by default
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
                     .AddFluentValidation(config =>
                     {
                         config.RegisterValidatorsFromAssembly(applicationAssembly);
@@ -53,7 +60,8 @@ namespace API
 
             app.UseCors("CorsPolicy");
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // before authorization
+            app.UseAuthorization(); // after authentication
 
             app.UseEndpoints(endpoints =>
             {
