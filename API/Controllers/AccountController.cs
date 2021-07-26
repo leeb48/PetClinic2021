@@ -1,3 +1,6 @@
+using System;
+using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Services;
@@ -25,6 +28,16 @@ namespace API.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> CurrentUser()
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+
+            return CreateUserDto(user);
         }
 
         [HttpPost("login")]
@@ -69,6 +82,10 @@ namespace API.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            Console.WriteLine("-----------------------");
+            Console.WriteLine(JsonSerializer.Serialize(result));
+            Console.WriteLine("-----------------------");
 
             if (result.Succeeded)
             {

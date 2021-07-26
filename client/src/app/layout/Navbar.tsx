@@ -12,15 +12,19 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import LoginForm from '../../features/users/LoginForm';
 import RegisterForm from '../../features/users/RegisterForm';
 import { useStore } from '../store/store';
 
-export default function WithSubnavigation() {
+const WithSubnavigation = () => {
   const { isOpen, onToggle } = useDisclosure();
 
-  const { modalStore } = useStore();
+  const {
+    modalStore,
+    userStore: { isLoggedIn, logout },
+  } = useStore();
 
   return (
     <Box>
@@ -73,30 +77,49 @@ export default function WithSubnavigation() {
           direction={'row'}
           spacing={6}
         >
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant='outline'
-            href={'#'}
-            onClick={() => modalStore.openModal(<LoginForm />)}
-          >
-            Sign In
-          </Button>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            href={'#'}
-            _hover={{
-              bg: 'pink.300',
-            }}
-            onClick={() => modalStore.openModal(<RegisterForm />)}
-          >
-            Sign Up
-          </Button>
+          {isLoggedIn ? (
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'pink.400'}
+              href={'#'}
+              _hover={{
+                bg: 'pink.300',
+              }}
+              onClick={() => logout()}
+            >
+              Log Out
+            </Button>
+          ) : (
+            <>
+              <Button
+                as={'a'}
+                fontSize={'sm'}
+                fontWeight={400}
+                variant='outline'
+                href={'#'}
+                onClick={() => modalStore.openModal(<LoginForm />)}
+              >
+                Sign In
+              </Button>
+              <Button
+                display={{ base: 'none', md: 'inline-flex' }}
+                fontSize={'sm'}
+                fontWeight={600}
+                color={'white'}
+                bg={'pink.400'}
+                href={'#'}
+                _hover={{
+                  bg: 'pink.300',
+                }}
+                onClick={() => modalStore.openModal(<RegisterForm />)}
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </Stack>
       </Flex>
 
@@ -105,7 +128,7 @@ export default function WithSubnavigation() {
       </Collapse>
     </Box>
   );
-}
+};
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
@@ -191,3 +214,5 @@ const NAV_ITEMS: Array<NavItem> = [
     label: 'My Profile',
   },
 ];
+
+export default observer(WithSubnavigation);
