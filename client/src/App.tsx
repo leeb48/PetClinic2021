@@ -1,13 +1,15 @@
-import { Center } from '@chakra-ui/react';
-import LoadingComponent from 'app/layout/LoadingComponent';
-import { useStore } from 'app/store/store';
-import { observer } from 'mobx-react-lite';
-import * as React from 'react';
-import { Route, Switch } from 'react-router';
-import ModalContainer from './app/common/modal/ModalContainer';
-import Navbar from './app/layout/Navbar';
-import HomePage from './features/home/HomePage';
-import PetOwnerDashboard from './features/petOwners/dashboard/PetOwnerDashboard';
+import { Center } from "@chakra-ui/react";
+import LoadingComponent from "app/layout/LoadingComponent";
+import { useStore } from "app/store/store";
+import PetOwnerAddForm from "features/petOwners/dashboard/PetOwnerAddForm";
+import VeterinarianDashboard from "features/veterinarian/dashboard/VeterinarianDashboard";
+import { observer } from "mobx-react-lite";
+import * as React from "react";
+import { Route, Switch } from "react-router";
+import ModalContainer from "./app/common/modal/ModalContainer";
+import Navbar from "./app/layout/Navbar";
+import HomePage from "./features/home/HomePage";
+import PetOwnerDashboard from "./features/petOwners/dashboard/PetOwnerDashboard";
 
 const App = () => {
   const { commonStore, userStore } = useStore();
@@ -22,7 +24,7 @@ const App = () => {
 
   if (!commonStore.appLoaded) {
     return (
-      <Center h='100vh'>
+      <Center h="100vh">
         <LoadingComponent />
       </Center>
     );
@@ -33,8 +35,10 @@ const App = () => {
       <Navbar />
       <ModalContainer />
       <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/petowners' component={PetOwnerDashboard} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/pet-owners" component={PetOwnerDashboard} />
+        <Route exact path="/new-pet-owner" component={PetOwnerAddForm} />
+        <Route exact path="/vets" component={VeterinarianDashboard} />
       </Switch>
     </>
   );
