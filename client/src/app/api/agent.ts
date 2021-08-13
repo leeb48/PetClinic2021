@@ -1,6 +1,7 @@
-import { User, UserFormValues } from 'app/models/user';
-import { store } from 'app/store/store';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { PetOwnerFormValues, PetOwner } from "app/models/petOwner";
+import { User, UserFormValues } from "app/models/user";
+import { store } from "app/store/store";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -8,7 +9,7 @@ const sleep = (delay: number) => {
   });
 };
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;
@@ -30,8 +31,8 @@ axios.interceptors.response.use(
 
     switch (status) {
       case 400:
-        if (typeof data === 'string') {
-          console.log('Simple Server Error', data);
+        if (typeof data === "string") {
+          console.log("Simple Server Error", data);
         }
 
         if (data.errors) {
@@ -58,16 +59,29 @@ const requests = {
 };
 
 const Account = {
-  currentUser: () => requests.get<User>('/account'),
+  currentUser: () => requests.get<User>("/account"),
 
   register: (user: UserFormValues) =>
-    requests.post<User>('/account/register', user),
+    requests.post<User>("/account/register", user),
 
-  login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+  login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+};
+
+const PetOwners = {
+  getAllPetOwners: () => requests.get<PetOwner[]>("/petowners"),
+
+  getPetOwnerById: (id: string) => requests.get<PetOwner>(`/petowners/${id}`),
+
+  createPetOwner: (petOwner: PetOwnerFormValues) =>
+    requests.post<PetOwner>(`/petowners/`, petOwner),
+
+  updatePetOwner: (petOwner: PetOwnerFormValues, id: string) =>
+    requests.put<void>(`/petowners/${id}`, petOwner),
 };
 
 const agent = {
   Account,
+  PetOwners,
 };
 
 export default agent;

@@ -5,7 +5,7 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.Appointments
+namespace Application.PetOwners
 {
     public class Delete
     {
@@ -14,25 +14,24 @@ namespace Application.Appointments
             public Guid Id { get; set; }
         }
 
-        public class Hanlder : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            public Hanlder(DataContext context)
+            public Handler(DataContext context)
             {
                 _context = context;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var appointment = await _context.Appointments.FindAsync(request.Id);
+                var petOwner = await _context.PetOwners.FindAsync(request.Id);
 
-                if (appointment == null) return Result<Unit>.Failure($"Activity with ID '{request.Id}' does not exist");
+                if (petOwner == null) return Result<Unit>.Failure($"Pet owner with ID '{request.Id}' does not exist");
 
-                _context.Appointments.Remove(appointment);
+                _context.PetOwners.Remove(petOwner);
 
                 var saveSuccess = await _context.SaveChangesAsync() > 0;
-
-                if (!saveSuccess) return Result<Unit>.Failure("Failed to delete activity");
+                if (!saveSuccess) return Result<Unit>.Failure("Failed to remove pet owner");
 
                 return Result<Unit>.Success(Unit.Value);
             }

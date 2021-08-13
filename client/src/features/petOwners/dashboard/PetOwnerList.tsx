@@ -1,15 +1,25 @@
-import React from 'react';
-import PetOwnerListItem from './PetOwnerListItem';
+import { useStore } from "app/store/store";
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { useEffect } from "react";
+import PetOwnerListItem from "./PetOwnerListItem";
 
 const PetOwnerList = () => {
-  const numbers = [1, 2, 3, 4, 5];
+  const {
+    petOwnerStore: { getAllPetOwners, loadPetOwners },
+  } = useStore();
+
+  useEffect(() => {
+    loadPetOwners();
+  }, [loadPetOwners]);
+
   return (
     <>
-      {numbers.map((card) => (
-        <PetOwnerListItem key={card} />
+      {getAllPetOwners.map((petOwner) => (
+        <PetOwnerListItem key={petOwner.id} petOwner={petOwner} />
       ))}
     </>
   );
 };
 
-export default PetOwnerList;
+export default observer(PetOwnerList);

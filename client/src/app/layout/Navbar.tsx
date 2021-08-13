@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Link as RouteLink } from "react-router-dom";
 import LoginForm from "../../features/users/LoginForm";
 import RegisterForm from "../../features/users/RegisterForm";
 import { useStore } from "../store/store";
@@ -138,19 +139,22 @@ const DesktopNav = () => {
     <Stack direction={"row"} alignItems="center" spacing={4}>
       {NAV_ITEMS.map((navItem) => (
         <Box key={navItem.label}>
-          <Link
-            p={2}
-            href={navItem.href ?? "#"}
-            fontSize={"sm"}
-            fontWeight={500}
-            color={linkColor}
-            _hover={{
-              textDecoration: "none",
-              color: linkHoverColor,
-            }}
-          >
-            {navItem.label}
-          </Link>
+          <RouteLink to={navItem.href ?? "#"}>
+            <Button
+              p={2}
+              // href={navItem.href ?? "#"}
+              variant="link"
+              fontSize={"sm"}
+              fontWeight={500}
+              color={linkColor}
+              _hover={{
+                textDecoration: "none",
+                color: linkHoverColor,
+              }}
+            >
+              {navItem.label}
+            </Button>
+          </RouteLink>
         </Box>
       ))}
     </Stack>
@@ -206,11 +210,11 @@ interface NavItem {
 const NAV_ITEMS: Array<NavItem> = [
   {
     label: "Pet Owners",
-    href: "pet-owners",
+    href: "/pet-owners",
   },
   {
     label: "Veterinarians",
-    href: "vets",
+    href: "/vets",
   },
   {
     label: "My Profile",

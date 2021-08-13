@@ -1,10 +1,10 @@
-import { Box, Button, Center, Heading, Link, Stack } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Stack } from "@chakra-ui/react";
+import "app/styles/Pagination.css";
 import React from "react";
 import ReactPaginate from "react-paginate";
+import { useHistory } from "react-router";
 import SearchBar from "../../../app/layout/SearchBar";
 import PetOwnerList from "./PetOwnerList";
-import "app/styles/Pagination.css";
-import { useHistory } from "react-router";
 
 const PetOwnerDashboard = () => {
   const history = useHistory();

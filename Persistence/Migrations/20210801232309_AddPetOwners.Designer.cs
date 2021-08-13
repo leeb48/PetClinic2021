@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210801232309_AddPetOwners")]
+    partial class AddPetOwners
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,16 +141,13 @@ namespace Persistence.Migrations
 
                     b.HasIndex("PetOwnerId");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pet");
                 });
 
             modelBuilder.Entity("Domain.PetOwner", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -302,12 +301,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Pet", b =>
                 {
-                    b.HasOne("Domain.PetOwner", "PetOwner")
+                    b.HasOne("Domain.PetOwner", null)
                         .WithMany("Pets")
-                        .HasForeignKey("PetOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("PetOwner");
+                        .HasForeignKey("PetOwnerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

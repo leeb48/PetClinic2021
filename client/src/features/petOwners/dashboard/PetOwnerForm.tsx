@@ -14,36 +14,61 @@ import TextInput from "app/common/form/TextInput";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import React, { useState } from "react";
-import { NewPetOwner, Pet, PetOwner } from "app/models/petOwner";
+import { PetOwnerFormValues, Pet, PetOwner } from "app/models/petOwner";
+import { useStore } from "app/store/store";
+import { RouteComponentProps } from "react-router";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-const PetOwnerAddForm = () => {
-  const petOwnerInitialValues: PetOwner = {
-    ownerName: "",
-    email: "",
-    phone: "",
-    pets: [],
-  };
+interface MatchParams {
+  id?: string;
+}
+
+interface Props extends RouteComponentProps<MatchParams> {}
+
+const PetOwnerForm: React.FC<Props> = ({ match }) => {
+  const {
+    petOwnerStore: {
+      createPetOwner,
+      updatePetOwner,
+      selectedPetOwner,
+      loadPetOwner,
+      unloadPetOwner,
+    },
+  } = useStore();
+
+  const { id } = match.params;
+
+  const [petOwner, setPetOwner] = useState<PetOwnerFormValues>(
+    new PetOwnerFormValues()
+  );
+
+  useEffect(() => {
+    if (id) {
+      loadPetOwner(id).then((selectedPetOwner) => {
+        setPetOwner(new PetOwnerFormValues(selectedPetOwner));
+      });
+    }
+
+    return () => {
+      unloadPetOwner();
+    };
+  }, [id, selectedPetOwner, loadPetOwner, setPetOwner]);
+
   const petInitialValues: Pet = {
+    id: "",
     petName: "",
     petType: "",
     petAge: "",
   };
 
-  const [pets, setPets] = useState<Pet[]>([]);
-
-  const handleAddPet = (values: any) => {
-    setPets([
-      ...pets,
-      {
-        petName: values.petName,
-        petAge: values.petAge,
-        petType: values.petType,
-      },
-    ]);
-  };
-
   const handleRemovePet = (removeIndex: number) => {
-    setPets(pets.filter((pet, index) => index !== removeIndex));
+    setPetOwner({
+      ...petOwner,
+      pets: petOwner.pets.filter((pet, index) => index !== removeIndex),
+    });
+
+    // TODO: remove pet from petowner on backend
   };
 
   return (
@@ -53,15 +78,19 @@ const PetOwnerAddForm = () => {
 
         {/* Owner Form */}
         <Formik
-          initialValues={petOwnerInitialValues}
+          initialValues={petOwner}
+          enableReinitialize
           validationSchema={Yup.object({
             ownerName: Yup.string().required(),
             email: Yup.string().email().required(),
             phone: Yup.string().required(),
           })}
           onSubmit={(values) => {
-            // TODO: send new owner data to backend
-            console.log(new NewPetOwner(values, pets));
+            if (id) {
+              updatePetOwner(values, id);
+            } else {
+              createPetOwner(values);
+            }
           }}
         >
           {({ values }) => (
@@ -86,7 +115,8 @@ const PetOwnerAddForm = () => {
             petType: Yup.string().required(),
           })}
           onSubmit={(values, { resetForm }) => {
-            handleAddPet(values);
+            // handleAddPet(values);
+            petOwner.pets.push(values);
             resetForm();
           }}
         >
@@ -113,8 +143,8 @@ const PetOwnerAddForm = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {pets.length !== 0 &&
-                    pets.map((pet, index) => (
+                  {petOwner.pets.length !== 0 &&
+                    petOwner.pets.map((pet, index) => (
                       <Tr key={index}>
                         <Td>{pet.petName}</Td>
                         <Td>{pet.petType}</Td>
@@ -136,4 +166,4 @@ const PetOwnerAddForm = () => {
   );
 };
 
-export default PetOwnerAddForm;
+export default observer(PetOwnerForm);
