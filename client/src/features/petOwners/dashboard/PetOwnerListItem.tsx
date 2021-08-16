@@ -6,10 +6,13 @@ import {
   FlexProps,
   Heading,
   Button,
+  Stack,
+  HStack,
 } from "@chakra-ui/react";
 import { PetOwner } from "app/models/petOwner";
 import { Link as RouteLink } from "react-router-dom";
 import React from "react";
+import { useStore } from "app/store/store";
 
 //----------------------------------------------------------------------------------------------
 
@@ -58,6 +61,9 @@ interface Props {
 
 const CardHeader = (props: Props) => {
   const { title, action, petOwnerId } = props;
+  const {
+    petOwnerStore: { removePetOwner },
+  } = useStore();
   return (
     <Flex
       align="center"
@@ -69,9 +75,14 @@ const CardHeader = (props: Props) => {
       <Heading as="h2" fontSize="lg">
         {title}
       </Heading>
-      <RouteLink to={`/edit-pet-owner/${petOwnerId}`}>
-        <Button>Edit</Button>
-      </RouteLink>
+      <HStack>
+        <RouteLink to={`/edit-pet-owner/${petOwnerId}`}>
+          <Button>Edit</Button>
+        </RouteLink>
+        <Button onClick={() => removePetOwner(petOwnerId!)} colorScheme="red">
+          Remove
+        </Button>
+      </HStack>
       {action}
     </Flex>
   );

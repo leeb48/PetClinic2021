@@ -77,6 +77,8 @@ const PetOwners = {
 
   updatePetOwner: (petOwner: PetOwnerFormValues, id: string) =>
     requests.put<void>(`/petowners/${id}`, petOwner),
+
+  removePetOwner: (id: string) => requests.del(`/petowners/${id}`),
 };
 
 const agent = {

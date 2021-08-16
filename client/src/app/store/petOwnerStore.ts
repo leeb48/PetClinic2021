@@ -6,6 +6,8 @@ export default class PetOwnerStore {
   petOwnersRegistry = new Map<string, PetOwner>();
   selectedPetOwner: PetOwner | null = null;
 
+  //TODO: create loading flags for async processes
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -74,6 +76,16 @@ export default class PetOwnerStore {
       updatedPetOwner.id = id;
 
       this.petOwnersRegistry.set(id, updatedPetOwner);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  removePetOwner = async (id: string) => {
+    try {
+      await agent.PetOwners.removePetOwner(id);
+
+      this.petOwnersRegistry.delete(id);
     } catch (error) {
       console.log(error);
     }
