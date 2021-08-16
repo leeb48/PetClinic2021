@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,10 +42,10 @@ namespace Application.PetOwners
 
                 var petOwner = await _context.PetOwners.Include(x => x.Pets).FirstOrDefaultAsync(x => x.Id == request.PetOwner.Id);
 
+
                 if (petOwner == null) return null;
 
                 _mapper.Map(request.PetOwner, petOwner);
-
 
                 var saveSuccess = await _context.SaveChangesAsync() > 0;
 

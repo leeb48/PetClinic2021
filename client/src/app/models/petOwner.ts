@@ -7,7 +7,7 @@ export interface PetOwner {
 }
 
 export interface Pet {
-  id: string;
+  id?: string;
   petName: string;
   petType: string;
   petAge: string;

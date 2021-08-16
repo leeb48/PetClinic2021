@@ -19,6 +19,7 @@ import { useStore } from "app/store/store";
 import { RouteComponentProps } from "react-router";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { v4 as uuidv4 } from "uuid";
 
 interface MatchParams {
   id?: string;
@@ -56,7 +57,6 @@ const PetOwnerForm: React.FC<Props> = ({ match }) => {
   }, [id, selectedPetOwner, loadPetOwner, setPetOwner]);
 
   const petInitialValues: Pet = {
-    id: "",
     petName: "",
     petType: "",
     petAge: "",
@@ -67,8 +67,6 @@ const PetOwnerForm: React.FC<Props> = ({ match }) => {
       ...petOwner,
       pets: petOwner.pets.filter((pet, index) => index !== removeIndex),
     });
-
-    // TODO: remove pet from petowner on backend
   };
 
   return (
@@ -115,7 +113,6 @@ const PetOwnerForm: React.FC<Props> = ({ match }) => {
             petType: Yup.string().required(),
           })}
           onSubmit={(values, { resetForm }) => {
-            // handleAddPet(values);
             petOwner.pets.push(values);
             resetForm();
           }}
